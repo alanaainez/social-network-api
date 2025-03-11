@@ -1,24 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
+import ReactionSchema from './Reaction';
 
-const ReactionSchema = new Schema({
-  reactionId: {
-    type: Types.ObjectId,
-    default: () => new Types.ObjectId(),
-  },
-  reactionBody: {
-    type: String,
-    required: true,
-    maxlength: 280,
-  },
-  username: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
 
 const ThoughtSchema = new Schema({
   thoughtText: {
@@ -48,4 +30,6 @@ ThoughtSchema.virtual('reactionCount').get(function () {
   return this.reactions.length;
 });
 
-export const Thought = model('Thought', ThoughtSchema);
+const Thought = model('Thought', ThoughtSchema);
+
+export default Thought;

@@ -2,21 +2,24 @@ import { Schema, model, Types, get } from 'mongoose';
 
 const reactionSchema = new Schema({
     reactionId: {
-        type: Schema.Types.ObjectId,
-        default: () => new Types.ObjectId()
+      type: Types.ObjectId,
+      default: () => new Types.ObjectId(),
     },
     reactionBody: {
-        type: String,
-        required: true,
-        maxLength: 280
+      type: String,
+      required: true,
+      maxlength: 280,
     },
     username: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     createdAt: {
-        type: Date,
-        default: Date.now,
-        get: (timestamp: number) => new Date(timestamp).toLocaleDateString()
-    }
-})
+      type: Date,
+      default: Date.now,
+    },
+  });
+
+const Reaction = model('Reaction', reactionSchema);
+
+export default Reaction;

@@ -33,8 +33,10 @@ const userSchema = new Schema({
     });
     
     // Virtual to get the friend count
-    userSchema.virtual('friendCount').get(function () {
+    userSchema.virtual('friendCount').get(function (this: { friends: Types.ObjectId[] }) {
       return this.friends.length;
     });
     
-    export const User = model('User', userSchema);
+    const User = model('User', userSchema);
+
+    export default User;
