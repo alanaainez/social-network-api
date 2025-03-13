@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { User, Thought } from './models/index.js';
+import { User, Thought } from '../models/index.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -49,7 +49,7 @@ const seedDatabase = async () => {
         const user = createdUsers.find(u => u.username === thought.username);
         if (user) {
           const newThought = await Thought.create({ ...thought, userId: user._id });
-          user.thoughts.push(newThought._id);
+          user.thoughts.push(newThought._id as mongoose.Types.ObjectId);
           await user.save();
         }
       }
