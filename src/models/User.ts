@@ -1,6 +1,13 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, model, Types, Document } from 'mongoose';
 
-const userSchema = new Schema({
+interface IUser extends Document {
+  username: string,
+  email: string,
+  thoughts: Types.ObjectId[],
+  friends: Schema.Types.ObjectId[]
+}
+
+const userSchema = new Schema<IUser>({
     username: {
         type: String,
         unique: true,
@@ -37,6 +44,7 @@ const userSchema = new Schema({
       return this.friends.length;
     });
     
-    const User = model('User', userSchema);
+    const user = model('User', userSchema);
 
-    export default User;
+    export default user;
+    export { IUser };

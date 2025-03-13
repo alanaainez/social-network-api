@@ -1,8 +1,15 @@
-import { Schema, model, Types, get } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 
-const reactionSchema = new Schema({
+interface IReaction {
+    reactionId: Types.ObjectId,
+    reactionBody: string,
+    username: string,
+    createdAt: Date,
+}
+
+const reactionSchema = new Schema<IReaction>({
     reactionId: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       default: () => new Types.ObjectId(),
     },
     reactionBody: {
@@ -20,6 +27,4 @@ const reactionSchema = new Schema({
     },
   });
 
-const Reaction = model('Reaction', reactionSchema);
-
-export default Reaction;
+export { IReaction, reactionSchema};
