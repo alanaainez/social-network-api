@@ -37,7 +37,7 @@ export const getUserById = async (req: Request, res: Response) => {
     if (user) {
       res.json({
         user,
-        grade: await user(userId),
+        thoughts: user,
       });
     } else {
       res.status(404).json({
