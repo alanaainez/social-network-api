@@ -61,7 +61,7 @@ export const updateThought = async (req, res) => {
 // delete thought
 export const deleteThought = async (req, res) => {
     try {
-        const thought = await Thought.findOneAndDelete({ _id: req.params.courseId });
+        const thought = await Thought.findByIdAndDelete({ _id: req.params.thoughtId });
         if (!thought) {
             res.status(404).json({
                 message: 'No thought with that ID',

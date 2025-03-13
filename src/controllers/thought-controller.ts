@@ -68,14 +68,17 @@ export const updateThought = async (req: Request, res: Response) => {
 // delete thought
 export const deleteThought = async (req: Request, res: Response) => {
   try {
-    const thought = await Thought.findOneAndDelete({ _id: req.params.courseId });
+    const thought = await Thought.findByIdAndDelete(req.params.thoughtId );
 
     if (!thought) {
       res.status(404).json({
         message: 'No thought with that ID',
       });
     } else {
-      await User.deleteMany({ _id: { $in: thought.reactions } });
+      await User.updateMany(
+        { thoughts: req.params.thoughtId },
+        { $pull: { thoughts: req.params.thoughtId } }
+      );
       res.json({ message: 'Thought and reactions deleted!' });
     }
   } catch (error: any) {
