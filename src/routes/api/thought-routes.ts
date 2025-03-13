@@ -21,12 +21,12 @@ router
   .delete(deleteThought);
 
 // /api/thoughts/:thoughtId/reactions
-router.route('/:thoughtId/reactions').post((req, res) => {
+router.route('/:thoughtId/reactions').post((_, res) => {
   res.send('Create a reaction to a thought');
 });
 
 // /api/thoughts/:thoughtId/reactions/:reactionId
-router.route('/:thoughtId/reactions/:reactionId').delete((req, res) => {
+router.route('/:thoughtId/reactions/:reactionId').delete((_, res) => {
   res.send('Delete a reaction from a thought');
 });
 

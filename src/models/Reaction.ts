@@ -7,7 +7,7 @@ interface IReaction {
     createdAt: Date,
 }
 
-const reactionSchema = new Schema<IReaction>({
+const ReactionSchema = new Schema<IReaction>({
     reactionId: {
       type: Schema.Types.ObjectId,
       default: () => new Types.ObjectId(),
@@ -27,4 +27,4 @@ const reactionSchema = new Schema<IReaction>({
     },
   });
 
-export { IReaction, reactionSchema};
+export { IReaction, ReactionSchema};
