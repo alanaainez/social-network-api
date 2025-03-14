@@ -11,23 +11,47 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/socialDB'
 
   const users = [
     {
-      username: 'exampleUser1',
-      email: 'user1@gmail.com',
+      username: 'ChefShaggy',
+      email: 'nsrogers@gmail.com',
     },
     {
-      username: 'exampleUser2',
-      email: 'user2@gmail.com',
+      username: 'MysteriousSpecs',
+      email: 'vdinkley@gmail.com',
+    },
+    {
+      username: 'GearFiveFred',
+      email: 'fjones@gmail.com',
+    },
+    {
+      username: 'BlackBeltBlake',
+      email: 'dblake@gmail.com',
+    },
+    {
+      username: 'ScoobyTheGreatDane',
+      email: 'scoobert.doo@gmail.com',
     },
   ];
 
   const thoughts = [
     {
-      thoughtText: 'This is my first thought!',
-      username: 'exampleUser1',
+      thoughtText: 'Zoinks! A Hobbit-style buffet at the Renaissance Fair!',
+      username: 'ChefShaggy',
     },
     {
-      thoughtText: 'Loving this social network API!',
-      username: 'exampleUser2',
+      thoughtText: 'Jinkies! Leigh Howard and the Ghosts of Simmons-Pierce Manor is a great read!',
+      username: 'MysteriousSpecs',
+    },
+    {
+      thoughtText: 'Ascots are still cool.',
+      username: 'GearFiveFred',
+    },
+    {
+      thoughtText: 'Jeepers! I need a spa day after that mystery.',
+      username: 'BlackBeltBlake',
+    },
+    {
+      thoughtText: 'Ruh-oh! Time to buy more Scooby Snax!',
+      username: 'ScoobyTheGreatDane',
     },
   ];
 
