@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 //import { ObjectId } from 'mongodb';
-import { User, Thought } from '../models/index.js';
+import User from '../models/User.js';
+import Thought from '../models/Thought.js';
+import mongoose from 'mongoose';
 
 // get all users
 export const headCount = async () => {
@@ -115,28 +117,58 @@ export const addFriend = async (req: Request, res: Response) => {
   console.log('You are adding a friend');
   console.log(req.body);
   try {
-    const user = await User.findOneAndUpdate(
-      { _id: req.params.userId },
-      { $addToSet: { friends: req.params.friendId } },
-      { runValidators: true, new: true }
-    );
-    return res.json(user);
-  } catch (err) {
-    return res.status(500).json(err);
+    const { userId, friendId } = req.params;
+    const user = await User.findById(userId);
+    const friend = await User.findById(friendId);
+
+    if (!user || !friend) {
+      return res.status(404).json({ message: "User or Friend not found" });
+    }
+
+    // Check if already friends
+    if (user.friends.includes(friendId as unknown as mongoose.Schema.Types.ObjectId)) {
+      return res.status(400).json({ message: "Already friends" });
+    }
+
+    // Add friend
+    user.friends.push(friendId as unknown as mongoose.Schema.Types.ObjectId);
+    await user.save();
+
+    // Also add the user to the friend's list (mutual friendship)
+    friend.friends.push(userId as unknown as mongoose.Schema.Types.ObjectId);
+    await friend.save();
+
+    return res.json({ message: "Friend added!", user });
+  } catch (err: any) {
+    return res.status(500).json({ message: err.message });
   }
 };
+
 // remove friend from friend list
 export const removeFriend = async (req: Request, res: Response) => {
   console.log('You are removing a friend');
-  console.log(req.body);
+  console.log(req.params);
+
   try {
-    const user = await User.findOneAndUpdate(
-      { _id: req.params.userId },
-      { $pull: { friends: req.params.friendId } },
-      { runValidators: true, new: true }
-    );
-    return res.json(user);
-  } catch (err) {
-    return res.status(500).json(err);
+    const { userId, friendId } = req.params;
+
+    const user = await User.findById(userId);
+    const friend = await User.findById(friendId);
+
+    if (!user || !friend) {
+      return res.status(404).json({ message: "User or Friend not found" });
+    }
+
+    // Remove friend
+    user.friends = user.friends.filter(id => id.toString() !== friendId);
+    await user.save();
+
+    // Also remove the user from the friend's list (mutual removal)
+    friend.friends = friend.friends.filter(id => id.toString() !== userId);
+    await friend.save();
+
+    return res.json({ message: "Friend removed!", user });
+  } catch (err: any) {
+    return res.status(500).json({ message: err.message });
   }
-}
+};
