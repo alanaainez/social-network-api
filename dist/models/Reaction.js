@@ -1,9 +1,5 @@
-import { Schema, Types } from 'mongoose';
+import { Schema } from 'mongoose';
 const ReactionSchema = new Schema({
-    reactionId: {
-        type: Schema.Types.ObjectId,
-        default: () => new Types.ObjectId(),
-    },
     reactionBody: {
         type: String,
         required: true,
@@ -17,5 +13,5 @@ const ReactionSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-});
+}, { id: false });
 export { ReactionSchema };
