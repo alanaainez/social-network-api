@@ -8,10 +8,6 @@ interface IReaction {
 }
 
 const ReactionSchema = new Schema<IReaction>({
-    reactionId: {
-      type: Schema.Types.ObjectId,
-      default: () => new Types.ObjectId(),
-    },
     reactionBody: {
       type: String,
       required: true,
@@ -25,6 +21,7 @@ const ReactionSchema = new Schema<IReaction>({
       type: Date,
       default: Date.now,
     },
-  });
+    }, 
+    { id: false });
 
 export { IReaction, ReactionSchema};
