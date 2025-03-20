@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const db = async (): Promise<typeof mongoose.connection> =>{
     try {
-        await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/socialmedia');
+        await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/socialDB');
         console.log('Database connected.');
         return mongoose.connection;
     } catch(error) {

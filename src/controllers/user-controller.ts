@@ -19,6 +19,8 @@ export const getAllUsers = async (_req: Request, res: Response) => {
     .populate('thoughts')
     .populate('friends');
 
+    console.log("Users fetched from DB:", users);
+
     const userObj = {
       users,
       headCount: await headCount(),
