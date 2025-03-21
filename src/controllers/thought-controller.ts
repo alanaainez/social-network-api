@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Thought, User } from '../models/index.js';
+import { IReaction } from '../models/Reaction.js';
 
 // get all thoughts
 export const getAllThoughts = async (_req: Request, res: Response) => {
@@ -93,19 +94,24 @@ export const addReaction = async (req: Request, res: Response) => {
   console.log('You are adding a reaction');
   console.log(req.body);
   try {
-    const thought = await Thought.findByIdAndUpdate(
-      req.params.thoughtId,
-      { $push: { reactions: req.body } },
-      { runValidators: true, new: true }
+    const { thoughtId } = req.params;
+    const reaction: IReaction = {
+        reactionBody: req.body.reactionBody,
+        username: req.body.username,
+        createdAt: new Date(),
+    };
+
+    const updatedThought = await Thought.findByIdAndUpdate(
+        thoughtId,
+        { $push: { reactions: reaction } },
+        { new: true }
     );
 
-    if (!thought) {
-      return res
-        .status(404)
-        .json({ message: 'No thought found with that ID :(' });
+    if (!updatedThought) {
+        return res.status(404).json({ message: "Thought not found" });
     }
 
-    return res.json(thought);
+    return res.json(updatedThought);
   } catch (err) {
     return res.status(500).json(err);
   }

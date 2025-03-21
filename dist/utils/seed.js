@@ -32,53 +32,64 @@ const thoughts = [
     {
         thoughtText: 'Zoinks! A Hobbit-style buffet at the Renaissance Fair!',
         username: 'ChefShaggy',
-        reactions: [],
+        createdAt: new Date(),
+        reactions: [
+            {
+                reactionBody: "Cool!",
+                username: "ScoobyTheGreatDane",
+                createdAt: new Date()
+            }
+        ],
     },
     {
         thoughtText: 'Jinkies! Leigh Howard and the Ghosts of Simmons-Pierce Manor is a great read!',
         username: 'MysteriousSpecs',
-        reactions: [],
+        createdAt: new Date(),
+        reactions: [
+            {
+                reactionBody: "That's awesome!",
+                username: "GearFiveFred",
+                createdAt: new Date()
+            }
+        ],
     },
     {
         thoughtText: 'Ascots are still cool.',
         username: 'GearFiveFred',
-        reactions: [],
+        createdAt: new Date(),
+        reactions: [
+            {
+                reactionBody: "Totally agree!",
+                username: "BlackBeltBlake",
+                createdAt: new Date()
+            }
+        ],
     },
     {
         thoughtText: 'Jeepers! I need a spa day after that mystery.',
         username: 'BlackBeltBlake',
-        reactions: [],
+        createdAt: new Date(),
+        reactions: [
+            {
+                reactionBody: "Jinkies! Count me in!",
+                username: "MysteriousSpecs",
+                createdAt: new Date()
+            }
+        ],
     },
     {
         thoughtText: 'Ruh-oh! Time to buy more Scooby Snax!',
         username: 'ScoobyTheGreatDane',
-        reactions: [],
+        createdAt: new Date(),
+        reactions: [
+            {
+                reactionBody: "Time for a Costco run!",
+                username: "ChefShaggy",
+                createdAt: new Date()
+            }
+        ],
     },
 ];
-const sampleReactions = [
-    {
-        reactionBody: "Cool!", username: "ScoobyTheGreatDane"
-    },
-    {
-        reactionBody: "That's awesome!", username: "GearFiveFred"
-    },
-    {
-        reactionBody: "Totally agree!", username: "BlackBeltBlake"
-    },
-    {
-        reactionBody: "Jinkies! Count me in!", username: "MysteriousSpecs"
-    },
-    {
-        reactionBody: "Time for a Costco run!", username: "ChefShaggy"
-    },
-];
-const getRandomReactions = () => {
-    const reactionCount = Math.floor(Math.random() * 4); // 0 to 3 reactions
-    return Array.from({ length: reactionCount }, () => {
-        const randomReaction = sampleReactions[Math.floor(Math.random() * sampleReactions.length)];
-        return { ...randomReaction, createdAt: new Date() };
-    });
-};
 // Seed Function
 const seedDatabase = async () => {
     try {
@@ -93,13 +104,11 @@ const seedDatabase = async () => {
         for (const thought of thoughts) {
             const user = createdUsers.find(u => u.username === thought.username);
             if (user) {
-                // Generate random reactions for this thought
-                const reactions = getRandomReactions();
                 // Create a new Thought with reactions
                 const newThought = await Thought.create({
                     ...thought,
                     userId: user._id,
-                    reactions, // Adding reactions here
+                    reactions: thought.reactions || [], // Reactions made to thought
                 });
                 // Link thought to user
                 user.thoughts.push(newThought._id);

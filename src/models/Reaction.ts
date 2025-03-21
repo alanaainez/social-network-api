@@ -1,10 +1,9 @@
-import { Schema, Types } from 'mongoose';
+import { Schema } from 'mongoose';
 
 interface IReaction {
-    reactionId: Types.ObjectId,
     reactionBody: string,
     username: string,
-    createdAt: Date,
+    createdAt?: Date,
 }
 
 const ReactionSchema = new Schema<IReaction>({

@@ -1,12 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { User, Thought } from '../models/index.js';
-
-interface IReaction {
-  reactionBody: string;
-  username: string;
-  createdAt?: Date;
-}
+import { IReaction } from '../models/Reaction.js';
 
 
 dotenv.config();
@@ -16,7 +11,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/socialDB'
     useUnifiedTopology: true,
   } as mongoose.ConnectOptions);
 
-  const users = [
+const users = [
     {
       username: 'ChefShaggy',
       email: 'nsrogers@gmail.com',
@@ -39,7 +34,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/socialDB'
     },
   ];
 
-  const thoughts = [
+const thoughts = [
     {
       thoughtText: 'Zoinks! A Hobbit-style buffet at the Renaissance Fair!',
       username: 'ChefShaggy',
@@ -50,7 +45,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/socialDB'
           username: "ScoobyTheGreatDane",
           createdAt: new Date()
         }
-      ],
+      ] as IReaction[],
     },
     {
       thoughtText: 'Jinkies! Leigh Howard and the Ghosts of Simmons-Pierce Manor is a great read!',
@@ -62,7 +57,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/socialDB'
           username: "GearFiveFred",
           createdAt: new Date()
         }
-      ],
+      ] as IReaction[],
     },
     {
       thoughtText: 'Ascots are still cool.',
@@ -74,7 +69,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/socialDB'
           username: "BlackBeltBlake",
           createdAt: new Date()
         }
-      ],
+      ] as IReaction[],
     },
     {
       thoughtText: 'Jeepers! I need a spa day after that mystery.',
@@ -86,7 +81,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/socialDB'
           username: "MysteriousSpecs",
           createdAt: new Date()
         }
-      ],
+      ] as IReaction[],
     },
     {
       thoughtText: 'Ruh-oh! Time to buy more Scooby Snax!',
@@ -98,11 +93,11 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/socialDB'
           username: "ChefShaggy",
           createdAt: new Date()
         }
-      ],
+      ] as IReaction[],
     },
   ];
   // Seed Function
-  const seedDatabase = async () => {
+const seedDatabase = async () => {
     try {
         // Clear existing data
         await User.deleteMany({});
@@ -118,14 +113,11 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/socialDB'
         for (const thought of thoughts) {
             const user = createdUsers.find(u => u.username === thought.username);
             if (user) {
-                // Generate random reactions for this thought
-                const reactions = getRandomReactions();
-
                 // Create a new Thought with reactions
                 const newThought = await Thought.create({
                     ...thought,
                     userId: user._id,
-                    reactions, // Adding reactions here
+                    reactions: thought.reactions || [], // Reactions made to thought
                 });
 
                 // Link thought to user
