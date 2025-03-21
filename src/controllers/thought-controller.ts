@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { Thought, User } from '../models/index.js';
-import { IReaction } from '../models/Reaction.js';
 
 // get all thoughts
 export const getAllThoughts = async (_req: Request, res: Response) => {
@@ -95,21 +94,21 @@ export const addReaction = async (req: Request, res: Response) => {
   console.log(req.body);
   try {
     const { thoughtId } = req.params;
-    const reaction: IReaction = {
-        reactionBody: req.body.reactionBody,
-        username: req.body.username,
-        createdAt: new Date(),
-    };
+    const { reactionBody, username } = req.body;
 
-    const updatedThought = await Thought.findByIdAndUpdate(
-        thoughtId,
-        { $push: { reactions: reaction } },
-        { new: true }
-    );
+        if (!reactionBody || !username) {
+            return res.status(400).json({ message: 'Reaction body and username are required.' });
+        }
 
-    if (!updatedThought) {
-        return res.status(404).json({ message: "Thought not found" });
-    }
+        const updatedThought = await Thought.findByIdAndUpdate(
+            thoughtId,
+            { $push: { reactions: { reactionBody, username, createdAt: new Date() } } }, 
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedThought) {
+            return res.status(404).json({ message: 'Thought not found.' });
+        }
 
     return res.json(updatedThought);
   } catch (err) {
@@ -120,19 +119,19 @@ export const addReaction = async (req: Request, res: Response) => {
 // remove reaction from a thought
 export const removeReaction = async (req: Request, res: Response) => {
   try {
-    const thought = await Thought.findByIdAndUpdate(
-      { _id: req.params.thoughtId },
-      { $pull: { reactions: { reactionId: req.params.reactionId } } },
-      { runValidators: true, new: true }
-    );
+    const { thoughtId, reactionId } = req.params;
 
-    if (!thought) {
-      return res
-        .status(404)
-        .json({ message: 'No thought found with that ID :(' });
-    }
+        const updatedThought = await Thought.findByIdAndUpdate(
+            thoughtId,
+            { $pull: { reactions: { _id: reactionId } } }, 
+            { new: true }
+        );
 
-    return res.json(thought);
+        if (!updatedThought) {
+            return res.status(404).json({ message: 'Thought not found or reaction does not exist.' });
+        }
+
+    return res.json(updateThought);
   } catch (err) {
     return res.status(500).json(err);
   }

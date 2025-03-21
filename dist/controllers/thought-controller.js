@@ -84,14 +84,13 @@ export const addReaction = async (req, res) => {
     console.log(req.body);
     try {
         const { thoughtId } = req.params;
-        const reaction = {
-            reactionBody: req.body.reactionBody,
-            username: req.body.username,
-            createdAt: new Date(),
-        };
-        const updatedThought = await Thought.findByIdAndUpdate(thoughtId, { $push: { reactions: reaction } }, { new: true });
+        const { reactionBody, username } = req.body;
+        if (!reactionBody || !username) {
+            return res.status(400).json({ message: 'Reaction body and username are required.' });
+        }
+        const updatedThought = await Thought.findByIdAndUpdate(thoughtId, { $push: { reactions: { reactionBody, username, createdAt: new Date() } } }, { new: true, runValidators: true });
         if (!updatedThought) {
-            return res.status(404).json({ message: "Thought not found" });
+            return res.status(404).json({ message: 'Thought not found.' });
         }
         return res.json(updatedThought);
     }
@@ -102,13 +101,12 @@ export const addReaction = async (req, res) => {
 // remove reaction from a thought
 export const removeReaction = async (req, res) => {
     try {
-        const thought = await Thought.findByIdAndUpdate({ _id: req.params.thoughtId }, { $pull: { reactions: { reactionId: req.params.reactionId } } }, { runValidators: true, new: true });
-        if (!thought) {
-            return res
-                .status(404)
-                .json({ message: 'No thought found with that ID :(' });
+        const { thoughtId, reactionId } = req.params;
+        const updatedThought = await Thought.findByIdAndUpdate(thoughtId, { $pull: { reactions: { _id: reactionId } } }, { new: true });
+        if (!updatedThought) {
+            return res.status(404).json({ message: 'Thought not found or reaction does not exist.' });
         }
-        return res.json(thought);
+        return res.json(updateThought);
     }
     catch (err) {
         return res.status(500).json(err);
