@@ -114,6 +114,29 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
+// view a user's friend list
+interface GetUserFriendsRequest extends Request {
+  params: {
+    userId: string;
+  };
+}
+
+interface GetUserFriendsResponse extends Response {}
+
+export const getUserFriends = async (req: GetUserFriendsRequest, res: GetUserFriendsResponse) => {
+  try {
+    const user = await User.findById(req.params.userId).populate('friends', 'username email');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user.friends);
+  } catch (err: any) {
+    res.status(500).json(err);
+  }
+  return;
+};
+
 // add friend to friend list
 export const addFriend = async (req: Request, res: Response) => {
   console.log('You are adding a friend');
