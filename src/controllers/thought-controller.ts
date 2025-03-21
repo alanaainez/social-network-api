@@ -93,9 +93,9 @@ export const addReaction = async (req: Request, res: Response) => {
   console.log('You are adding a reaction');
   console.log(req.body);
   try {
-    const thought = await Thought.findOneAndUpdate(
-      { _id: req.params.thoughtId },
-      { $addToSet: { reactions: req.body } },
+    const thought = await Thought.findByIdAndUpdate(
+      req.params.thoughtId,
+      { $push: { reactions: req.body } },
       { runValidators: true, new: true }
     );
 
@@ -114,7 +114,7 @@ export const addReaction = async (req: Request, res: Response) => {
 // remove reaction from a thought
 export const removeReaction = async (req: Request, res: Response) => {
   try {
-    const thought = await Thought.findOneAndUpdate(
+    const thought = await Thought.findByIdAndUpdate(
       { _id: req.params.thoughtId },
       { $pull: { reactions: { reactionId: req.params.reactionId } } },
       { runValidators: true, new: true }
