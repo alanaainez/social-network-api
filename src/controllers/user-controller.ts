@@ -77,7 +77,7 @@ export const createUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findOneAndUpdate(
-      { _id: req.params.userId },
+      req.params.userId,
       { $set: req.body },
       { runValidators: true, new: true }
     );
