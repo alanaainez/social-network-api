@@ -8,7 +8,6 @@ import {
   createUser,
   deleteUser,
   updateUser,
-  getUserFriends,
   addFriend,
   removeFriend,
 } from '../../controllers/user-controller.js';
@@ -21,9 +20,6 @@ router.route('/:userId').get(getUserById).delete(deleteUser);
 
 // /api/users/:userId
 router.route('/:userId').put(updateUser)
-
-// /api/users/:userId/friends
-router.route('/:userId/friends').get(getUserFriends);
 
 // /api/users/:userId/friends
 router.route('/:userId/friends/:friendId').post(addFriend);
