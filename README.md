@@ -10,7 +10,7 @@ SO THAT my website can handle large amounts of unstructured data
 ```
 
 ## Video Walkthrough
-https://drive.google.com/file/d/1I9miYfDHmqfh7zDTjehv7czmZMzmNuNA/view?usp=drive_link
+https://drive.google.com/file/d/1-haHkLQfrF5ptkaPpDF-eu5DK1cG2AgB/view?usp=drive_link
 
 ## Acceptance Criteria
 
